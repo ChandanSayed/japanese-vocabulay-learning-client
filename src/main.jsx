@@ -11,6 +11,9 @@ import axios from "axios";
 import { Provider } from "react-redux";
 import store from "./redux/store.jsx";
 import Register from "./pages/register.jsx";
+import Login from "./pages/login.jsx";
+import Dashboard from "./pages/dashboard.jsx";
+import Lessons from "./pages/lessons.jsx";
 
 axios.defaults.baseURL = "http://localhost:8000/";
 
@@ -25,8 +28,20 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
+        path: "/dashboard",
+        element: <Dashboard />,
+      },
+      {
+        path: "/lessons",
+        element: <Lessons />,
+      },
+      {
         path: "/register",
         element: <Register />,
+      },
+      {
+        path: "/login",
+        element: <Login />,
       },
     ],
   },

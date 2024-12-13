@@ -4,10 +4,11 @@ export const userDataSlice = createSlice({
   name: "userData",
   initialState: {
     value: null,
-    loading: true,
   },
   reducers: {
     getUserData: (state, action) => {
+      console.log(action);
+
       state.value = action.payload;
     },
   },

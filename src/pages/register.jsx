@@ -2,11 +2,22 @@ import UploadImage from "@/components/image-uploader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { getUserData } from "@/redux/features/user/user-slice";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function Register() {
+  const navigate = useNavigate();
+  const userDetails = useSelector(state => state.userData.value);
+  useEffect(() => {
+    if (userDetails?.email) {
+      return navigate("/dashboard");
+    }
+  }, []);
+  const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
   const [form, setForm] = useState({
     name: "",
@@ -59,24 +70,29 @@ export default function Register() {
     if (validateForm()) {
       try {
         const res = await axios.post("/auth/register/", form);
+        console.log(res, "reg");
+
         if (res.status === 201) {
           const res = await axios.post("/auth/login/", {
             email: form.email,
             password: form.password,
           });
+          Cookies.set("token", res.data.token);
           if (res.data.loginSuccessful) {
+            dispatch(getUserData(res.data.user));
             Swal.fire({
               title: "Logged In",
               text: "You are successfully logged in.",
               icon: "success",
             });
+            return <Navigate to="/" />;
           }
         }
-      } catch (error) {
-        console.log(error.response.data);
+      } catch (err) {
+        console.log(err.response.data);
         Swal.fire({
           title: "Sorry",
-          text: error.response.data,
+          text: err.response.data,
           icon: "error",
         });
       }
@@ -146,6 +162,9 @@ export default function Register() {
         <Button type="submit" className="mt-4 bg-blue-500 text-white p-2 rounded-md">
           Register
         </Button>
+        <p>
+          Already Registered? <Link to={"/login"}>Login</Link>
+        </p>
       </form>
     </div>
   );

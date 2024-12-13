@@ -4,8 +4,6 @@ import App from "./App.jsx";
 import "./index.css";
 
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import ErrorPage from "./error-page.jsx";
-import Home from "./pages/Home.jsx";
 
 import axios from "axios";
 import { Provider } from "react-redux";
@@ -14,6 +12,8 @@ import Register from "./pages/register.jsx";
 import Login from "./pages/login.jsx";
 import Dashboard from "./pages/dashboard.jsx";
 import Lessons from "./pages/lessons.jsx";
+import Home from "./pages/home.jsx";
+import ErrorPage from "./error-page.jsx";
 
 // axios.defaults.baseURL = "http://localhost:8000/";
 axios.defaults.baseURL = "https://japanese-vocabulay-learning-server.onrender.com/";

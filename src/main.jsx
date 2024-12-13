@@ -10,6 +10,7 @@ import Home from "./pages/Home.jsx";
 import axios from "axios";
 import { Provider } from "react-redux";
 import store from "./redux/store.jsx";
+import Register from "./pages/register.jsx";
 
 axios.defaults.baseURL = "http://localhost:8000/";
 
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/register",
+        element: <Register />,
       },
     ],
   },

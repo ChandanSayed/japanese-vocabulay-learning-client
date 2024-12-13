@@ -1,22 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { POST } from "@/custom-hooks/use-api";
 import { getUserData } from "@/redux/features/user/user-slice";
-import axios from "axios";
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function Login() {
   const navigate = useNavigate();
   const userDetails = useSelector(state => state.userData.value);
-  useEffect(() => {
-    if (userDetails?.email) {
-      return navigate("/dashboard");
-    }
-  }, []);
+
   const dispatch = useDispatch();
   const [form, setForm] = useState({
     password: "",
@@ -27,30 +23,34 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await axios.post("/auth/login/", {
+      const res = await POST("/auth/login/", {
         email: form.email,
         password: form.password,
       });
-      console.log(res, "log");
       if (res.data.loginSuccessful) {
         Cookies.set("token", res.data.token);
-        dispatch(getUserData(res.data.user));
+        dispatch(getUserData(res.data.data));
         Swal.fire({
           title: "Logged In",
           text: "You are successfully logged in.",
           icon: "success",
         });
-        return <Navigate to="/" />;
+        navigate("/dashboard");
       }
     } catch (err) {
-      console.log(err.response.data);
       Swal.fire({
         title: "Sorry",
-        text: err.response.data,
+        text: err.response.data.message,
         icon: "error",
       });
     }
   };
+
+  useEffect(() => {
+    if (userDetails?.email) {
+      return navigate("/dashboard");
+    }
+  }, []);
 
   return (
     <div className="container mx-auto px-2 md:px-4 py-12">
@@ -80,10 +80,10 @@ export default function Login() {
         </div>
 
         <Button type="submit" className="mt-4 bg-blue-500 text-white p-2 rounded-md">
-          Register
+          Login
         </Button>
         <p>
-          Not Registered? <Link to={"/register"}>Login</Link>
+          Not Registered? <Link to={"/register"}>Register</Link>
         </p>
       </form>
     </div>

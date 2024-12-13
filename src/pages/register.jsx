@@ -2,21 +2,18 @@ import UploadImage from "@/components/image-uploader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { POST } from "@/custom-hooks/use-api";
 import { getUserData } from "@/redux/features/user/user-slice";
-import axios from "axios";
+import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function Register() {
   const navigate = useNavigate();
   const userDetails = useSelector(state => state.userData.value);
-  useEffect(() => {
-    if (userDetails?.email) {
-      return navigate("/dashboard");
-    }
-  }, []);
+
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
   const [form, setForm] = useState({
@@ -69,30 +66,39 @@ export default function Register() {
 
     if (validateForm()) {
       try {
-        const res = await axios.post("/auth/register/", form);
-        console.log(res, "reg");
+        const res = await POST("/auth/register/", form);
 
         if (res.status === 201) {
-          const res = await axios.post("/auth/login/", {
-            email: form.email,
-            password: form.password,
-          });
-          Cookies.set("token", res.data.token);
-          if (res.data.loginSuccessful) {
-            dispatch(getUserData(res.data.user));
-            Swal.fire({
-              title: "Logged In",
-              text: "You are successfully logged in.",
-              icon: "success",
+          try {
+            const res = await POST("/auth/login/", {
+              email: form.email,
+              password: form.password,
             });
-            return <Navigate to="/" />;
+            if (res.data.loginSuccessful) {
+              Cookies.set("token", res.data.token);
+              dispatch(getUserData(res.data.data));
+              Swal.fire({
+                title: "Logged In",
+                text: "You are successfully logged in.",
+                icon: "success",
+              });
+              navigate("/dashboard");
+            }
+          } catch (err) {
+            console.log(err);
+
+            Swal.fire({
+              title: "Sorry",
+              text: err.response.data.message,
+              icon: "error",
+            });
           }
         }
       } catch (err) {
-        console.log(err.response.data);
+        console.log(err);
         Swal.fire({
           title: "Sorry",
-          text: err.response.data,
+          text: err?.response?.data,
           icon: "error",
         });
       }
@@ -100,6 +106,12 @@ export default function Register() {
       console.log("Form has errors");
     }
   };
+
+  useEffect(() => {
+    if (userDetails?.email) {
+      return navigate("/dashboard");
+    }
+  }, []);
 
   return (
     <div className="container mx-auto px-2 md:px-4 py-12">

@@ -1,32 +1,28 @@
-import axios from "axios";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
 import Cookies from "js-cookie";
 import { getUserData } from "@/redux/features/user/user-slice";
 import Swal from "sweetalert2";
+import { POST } from "@/custom-hooks/use-api";
 
 export default function Navbar() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const userDetails = useSelector(state => state.userData.value);
 
   async function logout() {
-    const token = Cookies.get("token");
-    const res = await axios.post("/auth/logout", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await POST("/auth/logout");
     if (res.status === 200) {
       dispatch(getUserData(null));
+      navigate("/login");
       Cookies.remove("token");
       Swal.fire({
         title: "Logged Out",
         text: res.data.message,
         icon: "success",
       });
-      return <Navigate to="/login" />;
     }
   }
 

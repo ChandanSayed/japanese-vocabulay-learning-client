@@ -15,7 +15,8 @@ import Login from "./pages/login.jsx";
 import Dashboard from "./pages/dashboard.jsx";
 import Lessons from "./pages/lessons.jsx";
 
-axios.defaults.baseURL = "http://localhost:8000/";
+// axios.defaults.baseURL = "http://localhost:8000/";
+axios.defaults.baseURL = "https://japanese-vocabulay-learning-server.onrender.com/";
 
 const router = createBrowserRouter([
   {

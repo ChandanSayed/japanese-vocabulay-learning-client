@@ -42,11 +42,13 @@ export default function Navbar() {
               </li>
             </>
           )}
-          <li>
-            <Link className="hover:text-gray-400" to={"/lessons"}>
-              Lessons
-            </Link>
-          </li>
+          {userDetails?.userType === "user" && (
+            <li>
+              <Link className="hover:text-gray-400" to={"/lessons"}>
+                Lessons
+              </Link>
+            </li>
+          )}
 
           {!userDetails ? (
             <li>

@@ -14,6 +14,8 @@ import Dashboard from "./pages/dashboard.jsx";
 import Lessons from "./pages/lessons.jsx";
 import Home from "./pages/home.jsx";
 import ErrorPage from "./error-page.jsx";
+import DefaultLayout from "./layouts/default.jsx";
+import DashboardLayout from "./layouts/dashboard.jsx";
 
 // axios.defaults.baseURL = "http://localhost:8000/";
 axios.defaults.baseURL = "https://japanese-vocabulay-learning-server.onrender.com/";
@@ -26,11 +28,19 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: (
+          <DefaultLayout>
+            <Home />
+          </DefaultLayout>
+        ),
       },
       {
         path: "/dashboard",
-        element: <Dashboard />,
+        element: (
+          <DashboardLayout>
+            <Dashboard />
+          </DashboardLayout>
+        ),
       },
       {
         path: "/lessons",
@@ -42,7 +52,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/login",
-        element: <Login />,
+        element: (
+          <DefaultLayout>
+            <Login />
+          </DefaultLayout>
+        ),
       },
     ],
   },

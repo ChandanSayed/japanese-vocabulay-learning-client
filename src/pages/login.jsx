@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import { login } from "@/utils/use-auth";
@@ -11,7 +11,6 @@ import { login } from "@/utils/use-auth";
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const userDetails = useSelector(state => state.userData.value);
 
   const [form, setForm] = useState({
     password: "",
@@ -28,14 +27,7 @@ export default function Login() {
       navigate,
       dispatch
     );
-    console.log(res);
   };
-
-  useEffect(() => {
-    if (userDetails?.email) {
-      return navigate("/dashboard");
-    }
-  }, []);
 
   return (
     <div className="container mx-auto px-2 md:px-4 py-12">

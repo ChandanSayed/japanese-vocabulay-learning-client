@@ -2,9 +2,8 @@ import UploadImage from "@/components/image-uploader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { POST } from "@/custom-hooks/use-api";
-import { getUserData } from "@/redux/features/user/user-slice";
-import Cookies from "js-cookie";
+import { POST } from "@/utils/use-api";
+import { login } from "@/utils/use-auth";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -12,9 +11,8 @@ import Swal from "sweetalert2";
 
 export default function Register() {
   const navigate = useNavigate();
-  const userDetails = useSelector(state => state.userData.value);
-
   const dispatch = useDispatch();
+  const userDetails = useSelector(state => state.userData.value);
   const [errors, setErrors] = useState({});
   const [form, setForm] = useState({
     name: "",
@@ -69,30 +67,14 @@ export default function Register() {
         const res = await POST("/auth/register/", form);
 
         if (res.status === 201) {
-          try {
-            const res = await POST("/auth/login/", {
+          login(
+            {
               email: form.email,
               password: form.password,
-            });
-            if (res.data.loginSuccessful) {
-              Cookies.set("token", res.data.token);
-              dispatch(getUserData(res.data.data));
-              Swal.fire({
-                title: "Logged In",
-                text: "You are successfully logged in.",
-                icon: "success",
-              });
-              navigate("/dashboard");
-            }
-          } catch (err) {
-            console.log(err);
-
-            Swal.fire({
-              title: "Sorry",
-              text: err.response.data.message,
-              icon: "error",
-            });
-          }
+            },
+            navigate,
+            dispatch
+          );
         }
       } catch (err) {
         console.log(err);

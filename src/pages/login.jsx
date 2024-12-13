@@ -1,19 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { POST } from "@/custom-hooks/use-api";
-import { getUserData } from "@/redux/features/user/user-slice";
-import Cookies from "js-cookie";
+
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
+
+import { login } from "@/utils/use-auth";
 
 export default function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const userDetails = useSelector(state => state.userData.value);
 
-  const dispatch = useDispatch();
   const [form, setForm] = useState({
     password: "",
     email: "",
@@ -21,29 +20,15 @@ export default function Login() {
 
   const handleSubmit = async e => {
     e.preventDefault();
-
-    try {
-      const res = await POST("/auth/login/", {
+    const res = await login(
+      {
         email: form.email,
         password: form.password,
-      });
-      if (res.data.loginSuccessful) {
-        Cookies.set("token", res.data.token);
-        dispatch(getUserData(res.data.data));
-        Swal.fire({
-          title: "Logged In",
-          text: "You are successfully logged in.",
-          icon: "success",
-        });
-        navigate("/dashboard");
-      }
-    } catch (err) {
-      Swal.fire({
-        title: "Sorry",
-        text: err.response.data.message,
-        icon: "error",
-      });
-    }
+      },
+      navigate,
+      dispatch
+    );
+    console.log(res);
   };
 
   useEffect(() => {

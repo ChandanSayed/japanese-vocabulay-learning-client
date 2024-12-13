@@ -5,7 +5,7 @@ import { Button } from "./ui/button";
 import Cookies from "js-cookie";
 import { getUserData } from "@/redux/features/user/user-slice";
 import Swal from "sweetalert2";
-import { POST } from "@/custom-hooks/use-api";
+import { POST } from "@/utils/use-api";
 
 export default function Navbar() {
   const navigate = useNavigate();

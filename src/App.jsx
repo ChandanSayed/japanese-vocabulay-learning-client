@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 import { getUserData } from "./redux/features/user/user-slice";
 import { useDispatch } from "react-redux";
 import Navbar from "./components/Navbar";
-import { GET } from "./custom-hooks/use-api";
+import { GET } from "./utils/use-api";
 import Cookies from "js-cookie";
 
 function App() {

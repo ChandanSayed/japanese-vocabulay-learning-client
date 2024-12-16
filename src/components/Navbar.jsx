@@ -1,4 +1,3 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
@@ -29,8 +28,14 @@ export default function Navbar() {
   return (
     <div className="container mx-auto max-w-7xl px-2 md:px-4">
       <nav className="flex justify-between items-center py-2 ">
-        <Link to={"/"} className="text-4xl font-extrabold hover:text-gray-600">
+        <Link
+          to={"/"}
+          className="text-4xl font-extrabold hover:text-gray-600 hidden md:inline-block"
+        >
           Learn Japanese
+        </Link>
+        <Link to={"/"} className="text-4xl font-extrabold hover:text-gray-600 md:hidden">
+          LJ
         </Link>
         <ul className="flex gap-4 items-center">
           {userDetails?.userType === "admin" && (

@@ -18,7 +18,7 @@ export default function DashboardLayout() {
   return (
     <section className="py-20">
       <div className="container px-2 md:px-4 mx-auto">
-        <div className="flex">
+        <div className="flex flex-col md:flex-row gap-5">
           <div className="w-[200px]">
             <ul className="space-y-3">
               <li>
@@ -31,7 +31,7 @@ export default function DashboardLayout() {
               <li>
                 <Button asChild>
                   <Link className="w-full" to={"/dashboard/add-lesson"}>
-                    Add Lessons
+                    Add Lesson
                   </Link>
                 </Button>
               </li>

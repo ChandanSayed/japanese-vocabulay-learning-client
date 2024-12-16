@@ -52,6 +52,10 @@ const router = createBrowserRouter([
             element: <Lessons />,
           },
           {
+            path: "lessons/update/:id",
+            element: <AddLesson />,
+          },
+          {
             path: "add-lesson",
             element: <AddLesson />,
           },

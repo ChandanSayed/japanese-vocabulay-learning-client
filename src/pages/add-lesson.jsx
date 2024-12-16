@@ -39,8 +39,6 @@ export default function AddLesson() {
   useEffect(() => {
     async function getLesson() {
       const res = await GET(`/api/get-lesson/${id}`);
-      console.log(res);
-
       if (res.status === 200) {
         setForm(res.data);
       }

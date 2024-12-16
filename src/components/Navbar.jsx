@@ -33,7 +33,7 @@ export default function Navbar() {
           Learn Japanese
         </Link>
         <ul className="flex gap-4 items-center">
-          {userDetails && (
+          {userDetails?.userType === "admin" && (
             <>
               <li>
                 <Link className="hover:text-gray-400" to={"/dashboard"}>

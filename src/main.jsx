@@ -16,9 +16,14 @@ import Home from "./pages/home.jsx";
 import ErrorPage from "./error-page.jsx";
 import DefaultLayout from "./layouts/default.jsx";
 import DashboardLayout from "./layouts/dashboard.jsx";
+import AddLesson from "./pages/add-lesson.jsx";
+import AddVocabulary from "./pages/add-vocabulary.jsx";
+import ManageUsers from "./pages/manage-users.jsx";
+import LessonManagement from "./pages/lesson-management.jsx";
+import VocabularyManagement from "./pages/vocabulary-management.jsx";
 
-// axios.defaults.baseURL = "http://localhost:8000/";
-axios.defaults.baseURL = "https://japanese-vocabulay-learning-server.onrender.com/";
+axios.defaults.baseURL = "http://localhost:8000/";
+// axios.defaults.baseURL = "https://japanese-vocabulay-learning-server.onrender.com/";
 
 const router = createBrowserRouter([
   {
@@ -36,16 +41,43 @@ const router = createBrowserRouter([
       },
       {
         path: "/dashboard",
-        element: (
-          <DashboardLayout>
-            <Dashboard />
-          </DashboardLayout>
-        ),
+        element: <DashboardLayout />,
+        children: [
+          {
+            path: "",
+            element: <Dashboard />,
+          },
+          {
+            path: "lessons",
+            element: <Lessons />,
+          },
+          {
+            path: "add-lesson",
+            element: <AddLesson />,
+          },
+          {
+            path: "add-vocabulary",
+            element: <AddVocabulary />,
+          },
+          {
+            path: "manage-users",
+            element: <ManageUsers />,
+          },
+          {
+            path: "lesson-management",
+            element: <LessonManagement />,
+          },
+          {
+            path: "vocabulary-management",
+            element: <VocabularyManagement />,
+          },
+        ],
       },
       {
         path: "/lessons",
         element: <Lessons />,
       },
+
       {
         path: "/register",
         element: <Register />,

@@ -1,4 +1,4 @@
-import { GET } from "@/utils/use-api";
+import { DELETE, GET } from "@/utils/use-api";
 import { useEffect, useState } from "react";
 import {
   Table,
@@ -16,6 +16,12 @@ import { Link } from "react-router-dom";
 export default function Lessons() {
   const [lessons, setLessons] = useState([]);
   const userDetails = useSelector(state => state.userData.value);
+
+  async function deleteLesson(id) {
+    await DELETE(`/api/delete-lesson/${id}`);
+    getLessons();
+  }
+
   async function getLessons() {
     const res = await GET(`/api/get-lessons/`);
 
@@ -48,9 +54,12 @@ export default function Lessons() {
               <TableCell>{lesson.vocabularyCount}</TableCell>
               {userDetails.userType === "admin" && (
                 <TableCell>
-                  <Button asChild>
-                    <Link to={`/dashboard/lessons/update/${lesson._id}`}>Update</Link>
-                  </Button>
+                  <div className="flex flex-wrap gap-1">
+                    <Button asChild>
+                      <Link to={`/dashboard/lessons/update/${lesson._id}`}>Update</Link>
+                    </Button>
+                    <Button onClick={() => deleteLesson(lesson._id)}>Delete</Button>
+                  </div>
                 </TableCell>
               )}
             </TableRow>

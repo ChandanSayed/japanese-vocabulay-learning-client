@@ -64,6 +64,10 @@ const router = createBrowserRouter([
             element: <AddVocabulary />,
           },
           {
+            path: "vocabularies/update/:id",
+            element: <AddVocabulary />,
+          },
+          {
             path: "manage-users",
             element: <ManageUsers />,
           },

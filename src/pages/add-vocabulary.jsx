@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { GET, POST } from "@/utils/use-api";
+import { GET, POST, PUT } from "@/utils/use-api";
 import { useEffect, useState } from "react";
 import {
   Select,
@@ -12,10 +12,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export default function AddVocabulary() {
+  const id = useParams().id;
   const navigate = useNavigate();
   const [lessons, setLessons] = useState([]);
   const [form, setForm] = useState({
@@ -28,11 +29,11 @@ export default function AddVocabulary() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(form);
     try {
-      const res = await POST("/api/create-vocabulary/", form);
-      console.log(res);
-      if (res.status === 201) {
+      const res = await (id
+        ? PUT(`/api/update-vocabulary/${id}`, form)
+        : POST(`/api/create-vocabulary/`, form));
+      if (res.status === 201 || res.status === 200) {
         Swal.fire({
           title: "Good job!",
           text: "Vocabulary added successfully!",
@@ -45,11 +46,20 @@ export default function AddVocabulary() {
     }
   }
 
+  useEffect(() => {
+    async function getVocabulary() {
+      const res = await GET(`/api/get-vocabulary/${id}`);
+      if (res.status === 200) {
+        setForm(res.data);
+      }
+    }
+    if (id) getVocabulary();
+  }, [id]);
+
   async function getLessons() {
     const res = await GET(`/api/get-lessons/`);
     setLessons(res.data);
   }
-
   useEffect(() => {
     getLessons();
   }, []);
@@ -105,7 +115,12 @@ export default function AddVocabulary() {
             Lesson Number
           </Label>
 
-          <Select id="lessonNo" onValueChange={val => setForm({ ...form, lessonNo: val * 1 })}>
+          <Select
+            id="lessonNo"
+            placeholder="Select Lesson Number"
+            value={form.lessonNo}
+            onValueChange={val => setForm({ ...form, lessonNo: val * 1 })}
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select Lesson Number" />
             </SelectTrigger>
@@ -121,7 +136,7 @@ export default function AddVocabulary() {
           </Select>
         </div>
         <Button type="submit" className="mt-4 bg-blue-500 text-white p-2 rounded-md">
-          Add Vocabulary
+          {id ? "Update Vocabulary" : "Add Vocabulary"}
         </Button>
       </form>
     </div>

@@ -17,22 +17,26 @@ export default function AddLesson() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const res = await (id
-      ? PUT(`/api/update-lesson/${id}`, form)
-      : POST(`/api/create-lesson/`, form));
-    if (res.status === 201 || res.status === 200) {
-      Swal.fire({
-        title: "Good job!",
-        text: id ? "Lesson updated successfully!" : "Lesson added successfully!",
-        icon: "success",
-      });
-      navigate("/dashboard/lessons");
-    } else {
-      Swal.fire({
-        title: "Sorry!",
-        text: "Failed to add lesson!",
-        icon: "error",
-      });
+    try {
+      const res = await (id
+        ? PUT(`/api/update-lesson/${id}`, form)
+        : POST(`/api/create-lesson/`, form));
+      if (res.status === 201 || res.status === 200) {
+        Swal.fire({
+          title: "Good job!",
+          text: id ? "Lesson updated successfully!" : "Lesson added successfully!",
+          icon: "success",
+        });
+        navigate("/dashboard/lessons");
+      } else {
+        Swal.fire({
+          title: "Sorry!",
+          text: "Failed to add lesson!",
+          icon: "error",
+        });
+      }
+    } catch (error) {
+      console.log(error.response.data);
     }
   }
 
@@ -43,7 +47,7 @@ export default function AddLesson() {
         setForm(res.data);
       }
     }
-    getLesson();
+    if (id) getLesson();
   }, [id]);
 
   return (

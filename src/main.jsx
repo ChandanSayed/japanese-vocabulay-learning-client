@@ -22,8 +22,8 @@ import ManageUsers from "./pages/manage-users.jsx";
 import LessonManagement from "./pages/lesson-management.jsx";
 import VocabularyManagement from "./pages/vocabulary-management.jsx";
 
-// axios.defaults.baseURL = "http://localhost:8000/";
-axios.defaults.baseURL = "https://japanese-vocabulay-learning-server.onrender.com/";
+axios.defaults.baseURL = "http://localhost:8000/";
+// axios.defaults.baseURL = "https://japanese-vocabulay-learning-server.onrender.com/";
 
 const router = createBrowserRouter([
   {

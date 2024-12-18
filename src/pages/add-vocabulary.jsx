@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { GET } from "@/utils/use-api";
+import { GET, POST } from "@/utils/use-api";
 import { useEffect, useState } from "react";
 import {
   Select,
@@ -12,8 +12,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 export default function AddVocabulary() {
+  const navigate = useNavigate();
   const [lessons, setLessons] = useState([]);
   const [form, setForm] = useState({
     words: "",
@@ -23,9 +26,23 @@ export default function AddVocabulary() {
     lessonNo: null,
   });
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     console.log(form);
+    try {
+      const res = await POST("/api/create-vocabulary/", form);
+      console.log(res);
+      if (res.status === 201) {
+        Swal.fire({
+          title: "Good job!",
+          text: "Vocabulary added successfully!",
+          icon: "success",
+        });
+        navigate("/dashboard/vocabulary-management");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async function getLessons() {
